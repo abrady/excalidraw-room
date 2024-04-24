@@ -147,6 +147,14 @@ try {
       socket.removeAllListeners();
       socket.disconnect();
     });
+
+    socket.on("usercmd/rollDice", (numSides: number, numDice) => {
+      const result = Array.from({ length: numDice }, () =>
+        Math.floor(Math.random() * numSides) + 1,
+      );
+      const sum = result.reduce((acc, val) => acc + val, 0);
+      socket.emit("usercmd/rollDice:result", sum);
+    });
   });
 } catch (error) {
   console.error(error);
