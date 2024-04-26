@@ -7,7 +7,7 @@ RUN yarn
 
 COPY tsconfig.json ./
 COPY src ./src
-RUN yarn build
+RUN npx tsc 
 
 EXPOSE 80
 CMD ["yarn", "start"]
