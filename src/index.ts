@@ -15,6 +15,7 @@ type OnUserFollowedPayload = {
 const serverDebug = debug("server");
 const ioDebug = debug("io");
 const socketDebug = debug("socket");
+const userDebug = debug("user");
 
 require("dotenv").config(
   process.env.NODE_ENV !== "development"
@@ -148,12 +149,14 @@ try {
       socket.disconnect();
     });
 
-    socket.on("usercmd/rollDice", (numSides: number, numDice) => {
+    socket.on("usercmd/rollDice", (roomID: string, numSides: number, numDice) => {
       const result = Array.from({ length: numDice }, () =>
         Math.floor(Math.random() * numSides) + 1,
       );
       const sum = result.reduce((acc, val) => acc + val, 0);
-      socket.emit("usercmd/rollDice:result", sum);
+      userDebug(`${socket.id} rolled ${numDice}d${numSides} = ${sum}`);
+      // socket.emit("usercmd/rollDice:result", sum);
+      io.sockets.to(roomID).emit("usercmd/rollDice:result", sum);
     });
   });
 } catch (error) {
