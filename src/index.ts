@@ -150,13 +150,16 @@ try {
     });
 
     socket.on("usercmd/rollDice", (roomID: string, numSides: number, numDice) => {
+      console.log("socket.rooms", socket.rooms, 'roomID', roomID);
       const result = Array.from({ length: numDice }, () =>
         Math.floor(Math.random() * numSides) + 1,
       );
       const sum = result.reduce((acc, val) => acc + val, 0);
-      userDebug(`${socket.id} rolled ${numDice}d${numSides} = ${sum}`);
+      userDebug(`id ${socket.id} room ${roomID}: ${socket.id} rolled ${numDice}d${numSides} = ${sum}`);
       // socket.emit("usercmd/rollDice:result", sum);
-      io.sockets.to(roomID).emit("usercmd/rollDice:result", sum);
+      //io.sockets.to(roomID).emit("usercmd/rollDice:result", sum);
+      socket.to(roomID).emit("usercmd/rollDice:result", sum);
+      socket.emit("usercmd/rollDice:result", sum);
     });
   });
 } catch (error) {

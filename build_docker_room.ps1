@@ -1,1 +1,1 @@
-docker build -t excalidrawapp . 
+docker build -t excalidraw-server . 
